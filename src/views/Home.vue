@@ -42,7 +42,6 @@ import {
   LControl,
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
-import { onMounted } from 'vue';
 
 export default {
   name: "Home",
