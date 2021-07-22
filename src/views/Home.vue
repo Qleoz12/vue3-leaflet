@@ -1,47 +1,33 @@
 <template>
   <div class="mapContainer">
-    <l-map @ready="onStart()" ref="mymap" v-model="zoom" v-model:zoom="zoom" :center="center">
+    <l-map
+      ref="mymap"
+      v-model="zoom"
+      v-model:zoom="zoom"
+      :center="center"
+      @update:center="centerUpdate"
+      @update:zoom="zoomUpdate"
+    >
       <l-tile-layer :url="url" :attribution="attribution"> </l-tile-layer>
       <l-control class="clickControl" :position="position">
         <p @click="showClick">Control</p>
       </l-control>
     </l-map>
-    <div class="controller">
-      Controls:
-      <div>
-        <p>Lat:</p>
-        <form action="">
-          <input
-            v-model.number="latitude"
-            type="numbers"
-            placeholder="lattitude"
-          />
-        </form>
-
-        <p>Lng:</p>
-        <form action="">
-          <input
-            v-model.number="longitude"
-            type="numbers"
-            placeholder="longitude"
-          />
-        </form>
-        <br />
-        <button @click="flyToTarget()">Save</button>
-      </div>
-    </div>
+    <button @click="flyToTarget()">Save</button>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import "leaflet/dist/leaflet.css";
 import {
   LMap,
   LTileLayer,
   LControlLayers,
   LControl,
 } from "@vue-leaflet/vue-leaflet";
-import "leaflet/dist/leaflet.css";
+import { mapState } from "vuex";
+import { onMounted, ref } from "vue";
 
 export default {
   name: "Home",
@@ -59,22 +45,37 @@ export default {
       attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
       center: [51.505, -0.09],
       position: "topright",
-      latitude: "",
-      longitude: "",
+      centerLatLng: {},
+      currentCenter: Number,
+      currentZoom: Number,
     };
   },
+  computed: {
+    ...mapState(["onMoveLatitude", "onMoveLongitude"]),
+  },
+  setup() {
+    onMounted(() => {
+      this.$nextTick(() => {
+        this.$refs.mymap.mapObject;
+      });
+    });
+  },
+
   methods: {
-    onStart(){
-      // this.$nextTick(() => {
-      this.map = this.$refs.mymap.mapObject;
-    // });
+    zoomUpdate(zoom) {
+      this.currentZoom = zoom;
+    },
+    centerUpdate(center) {
+      this.currentCenter = center;
     },
     showClick() {
       console.log("clicked");
     },
     flyToTarget() {
-      console.log("lat " + this.latitude + " and " + "lng " + this.longitude);
-      this.map.flyTo(this.center, 13);
+      console.log(
+        "lat " + this.onMoveLatitude + " and " + "lng " + this.onMoveLongitude
+      );
+      this.$refs.mymap.mapObject.panTo(this.center, 13);
     },
   },
 };
@@ -99,7 +100,6 @@ export default {
   -webkit-user-select: none;
 }
 .controller {
-  /* border: 1px solid black; */
   height: 33vh;
   width: 100%;
 }
