@@ -1,7 +1,9 @@
 <template>
   <div class="mapContainer">
     <l-map
-      ref="mymap"
+      :use-global-leaflet="true"
+      @ready="onLoad"
+      ref="map"
       v-model="zoom"
       v-model:zoom="zoom"
       :center="center"
@@ -10,10 +12,9 @@
     >
       <l-tile-layer :url="url" :attribution="attribution"> </l-tile-layer>
       <l-control class="clickControl" :position="position">
-        <p @click="showClick">Control</p>
+        <p @click="flyToTarget()">Control</p>
       </l-control>
     </l-map>
-    <button @click="flyToTarget()">Save</button>
   </div>
 </template>
 
@@ -26,8 +27,9 @@ import {
   LControlLayers,
   LControl,
 } from "@vue-leaflet/vue-leaflet";
+import L from "leaflet";
 import { mapState } from "vuex";
-import { onMounted, ref } from "vue";
+import { onMounted, toRaw } from "vue";
 
 export default {
   name: "Home",
@@ -40,28 +42,44 @@ export default {
   data() {
     return {
       map: null,
-      zoom: 13,
+      zoom: 5,
       url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
       attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
       center: [51.505, -0.09],
-      position: "topright",
+      position: "topleft",
       centerLatLng: {},
       currentCenter: Number,
       currentZoom: Number,
+      lat: null,
+      lng: null,
+      marker: null,
+      circle: {
+        center: null,
+        radius: 6,
+        color: "red",
+      },
     };
   },
   computed: {
     ...mapState(["onMoveLatitude", "onMoveLongitude"]),
   },
-  setup() {
-    onMounted(() => {
-      this.$nextTick(() => {
-        this.$refs.mymap.mapObject;
-      });
-    });
-  },
-
   methods: {
+    onLoad() {
+      this.map = this.$refs.map.leafletObject;
+      console.log("Acquiring user position...");
+      this.map
+        .locate({ setView: true, watch: false, maxZoom: 17 })
+        .on("locationfound", (e) => {
+          console.log("Position acquired");
+          this.lat = e.latitude;
+          this.lng = e.longitude;
+          this.marker = new L.circleMarker([this.lat, this.lng]).addTo(toRaw(this.map))
+        })
+        // .circleMarker([this.lat, this.lng])
+        // .addTo(toRaw(this.map))
+        // .bindPopup("I am here!")
+        // .openPopup();
+    },
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
     },
@@ -72,10 +90,13 @@ export default {
       console.log("clicked");
     },
     flyToTarget() {
-      console.log(
-        "lat " + this.onMoveLatitude + " and " + "lng " + this.onMoveLongitude
-      );
-      this.$refs.mymap.mapObject.panTo(this.center, 13);
+      console.log("Acquiring user position...");
+      this.map
+        .locate({ setView: false, watch: true })
+        .on("locationfound", (e) => {
+          console.log("Position acquired");
+          this.map.flyTo([e.latitude, e.longitude], 16);
+        });
     },
   },
 };
