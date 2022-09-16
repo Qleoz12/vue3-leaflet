@@ -12,8 +12,12 @@
         </l-tooltip>
       </l-marker> -->
 
+      
+
       <l-marker v-for="(markertt, index) in markers" :key="index" :lat-lng="markertt"></l-marker>
     </l-map>
+
+    <div id="result" class="success">{{ result  }}</div>
   </div>
 </template>
 
@@ -45,9 +49,10 @@ export default {
   },
   data() {
     return {
+      result:0,
       map: null,
       zoom: 5,
-      url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+       url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
       attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
       center: [51.505, -0.09],
       position: "topleft",
@@ -72,73 +77,11 @@ export default {
     onLoad() {
       this.map = this.$refs.map.leafletObject;
       console.log("Acquiring user position...");
-      this.map
-        .locate({ setView: true, watch: false, maxZoom: 17 })
-        .on("locationfound", (e) => {
-          console.log("Position acquired");
-          this.lat = e.latitude;
-          this.lng = e.longitude;
-          // this.marker = new L.circleMarker([this.lat, this.lng]).addTo(toRaw(this.map))
-        })
-      // .circleMarker([this.lat, this.lng])
-      // .addTo(toRaw(this.map))
-      // .bindPopup("I am here!")
-      // .openPopup();
+      var one=new L.circle([24.711454873635766,46.67438218019588], { radius:977690,color: "#5CB8E4"}).addTo(this.map);
 
+      var one=new L.circle([39.65467179595615,66.97572083948319], { radius:2169860,color: "#367E18"}).addTo(this.map);
 
-      // Initialise the FeatureGroup to store editable layers
-      var editableLayers = new L.FeatureGroup();
-      this.map.addLayer(editableLayers);
-
-      var drawPluginOptions = {
-        position: 'topright',
-        draw: {
-          polygon: {
-            allowIntersection: false, // Restricts shapes to simple polygons
-            drawError: {
-              color: '#e1e100', // Color the shape will turn when intersects
-              message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-            },
-            shapeOptions: {
-              color: '#97009c'
-            }
-          },
-          // disable toolbar item by setting it to false
-          polyline: false,
-          circle: false, // Turns off this drawing tool
-          rectangle: false,
-          marker: false,
-          circlemarker:false
-        },
-        edit: {
-          featureGroup: editableLayers, //REQUIRED!!
-          remove: false
-        }
-      };
-
-      // Initialise the draw control and pass it the FeatureGroup of editable layers
-      var drawControl = new L.Control.Draw(drawPluginOptions);
-      this.map.addControl(drawControl);
-
-      var editableLayers = new L.FeatureGroup();
-      this.map.addLayer(editableLayers);
-
-      this.map.on('draw:created', function (e) {
-        var type = e.layerType,
-          layer = e.layer;
-
-        if (type === 'marker') {
-          layer.bindPopup('A popup!');
-        }
-
-        if(type==='polygon')
-        {
-          console.log(layer.getLatLngs())
-          console.log(getDistanceFromLatLonInKm(layer.getLatLngs()[0][0].lat,layer.getLatLngs()[0][0].lng,layer.getLatLngs()[0][1].lat,layer.getLatLngs()[0][1].lng))
-        }
-
-        editableLayers.addLayer(layer);
-      });
+      var one=new L.circle([40.78689100382049,14.368456432286543], { radius:2749400,color: "#25316D"}).addTo(this.map);
     },
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
@@ -162,9 +105,10 @@ export default {
       this.markers.splice(index, 1);
     },
     addMarkercustomFucntion(event) {
-      // console.log(event)
+      console.log(event)
 
-      // var newMarker = new L.marker(event.latlng)
+      this.result = JSON.parse(event)
+      
       // this.markers.addLayer(newMarker);
       // this.markers.addTo(this.map)
 

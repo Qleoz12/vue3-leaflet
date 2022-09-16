@@ -12,6 +12,8 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "allowJs":true,
+    "checkJs": false,
     "types": [
       "webpack-env"
     ],

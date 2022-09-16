@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import leaflet from '../components/Leaflet.vue'
+import Circles from '../views/Circles.vue'
 const routes = [
   {
     path: '/',
@@ -8,9 +8,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/leaflet',
+    path: '/circles',
     name: 'custom',
-    component: leaflet
+    component: Circles
   },
 ]
 
