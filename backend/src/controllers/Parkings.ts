@@ -3,13 +3,13 @@ import mongoose from 'mongoose';
 import Parking from '../models/Parking';
 
 const createBook = (req: Request, res: Response, next: NextFunction) => {
-    const { name, locations } = req.body;
+    const { name, locations,capacity} = req.body;
 
-    console.log(locations)
     const park = new Parking({
         _id: new mongoose.Types.ObjectId(),
         name,
-        locations
+        locations,
+        capacity
     });
     console.log(park)
     return park

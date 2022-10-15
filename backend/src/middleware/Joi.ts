@@ -45,9 +45,14 @@ export const Schemas = {
     parking: {
         create: Joi.object<IParking>({
             name: Joi.string()
-                .regex(/^[0-9a-zA-Z]{10,}$/)
+                .regex(/^[0-9a-zA-Z]{5,}$/)
                 .required(),
-             locations: Joi.object
+             locations: Joi.object().keys({ 
+                lat:Joi.number(),
+                lng:Joi.number(),
+
+             }),
+            capacity: Joi.number()
         })
     }
 };

@@ -38,7 +38,7 @@
                                 Category
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Price
+                                capacity
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <span class="sr-only">Edit</span>
@@ -65,6 +65,9 @@
                             </td>
                             <td class="px-6 py-4">
                                 {{item.locations.lng}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{item.capacity}}
                             </td>
                             <td class="px-6 py-4">
                                 estado

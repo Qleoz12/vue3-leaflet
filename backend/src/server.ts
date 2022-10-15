@@ -6,6 +6,11 @@ import Logging from './library/Logging';
 import authorRoutes from './routes/Author';
 import bookRoutes from './routes/Book';
 import parkingsRoutes from './routes/Parking';
+import schedulesRoutes from './routes/Schedule';
+import bussesRoutes from './routes/Bus';
+import busParkingRoutes from './routes/BusParking';
+
+
 
 const router = express();
 
@@ -53,6 +58,10 @@ const StartServer = () => {
     router.use('/authors', authorRoutes);
     router.use('/books', bookRoutes);
     router.use('/parkings', parkingsRoutes);
+    router.use('/schedules', schedulesRoutes);
+    router.use('/buses', bussesRoutes);
+    router.use('/busesParking', busParkingRoutes);
+
     /** Healthcheck */
     router.get('/ping', (req, res, next) => res.status(200).json({ hello: 'world' }));
 

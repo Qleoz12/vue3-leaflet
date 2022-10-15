@@ -10,9 +10,10 @@ export async function createParking(data) {
             
             name: data.name,
             locations: {
-                lat: data.lat,
-                lng: data.lng,
-            }
+                lat: Number(data.lat),
+                lng: Number(data.lng),
+            },
+            capacity: data.capacity
         })
       
 }

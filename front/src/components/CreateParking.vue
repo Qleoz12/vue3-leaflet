@@ -28,6 +28,13 @@
                                     class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                                     v-model="lng" name="lng" id="lng" aria-describedby="lngHelp" placeholder="lng">
                             </div>
+                            <div class="w-full md:w-full px-3 mb-6">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    for='Password'>capacity</label>
+                                <input
+                                    class="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+                                    v-model="capacity" name="capacity" id="capacity" aria-describedby="capacityHelp" placeholder="capacity">
+                            </div>
                         </div>
                         <button type="button" @click='createParking()' class="btn btn-danger">Create</button>
                     </form>
@@ -53,7 +60,8 @@ export default {
             const payload = {
                 name: this.name,
                 lat: this.lat,
-                lng: this.lng
+                lng: this.lng,
+                capacity:this.capacity
             }
             this.$emit('createParking', payload)
             this.clearForm();
