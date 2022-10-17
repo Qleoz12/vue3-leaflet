@@ -1,27 +1,25 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 
-export interface IBus {
-    alias: string;
-    placa: string;
-    locations: {
-            lat: Number, 
-            lng: Number
-        };
+export interface ITrip {
+    origen: string;
+    destino: string;
+    leaving: string;
+    arriving: string;
+    Bus_placa: string;
 }
 
-export interface IBusModel extends IBus, Document {}
+export interface ITripModel extends ITrip, Document {}
 
 
 
-const BusSchema: Schema = new Schema(
+const TripSchema: Schema = new Schema(
     {
-        alias: { type: String, required: true },
-        placa: { type: String, required: true },
-        locations: {
-            lat: Number, 
-            lng: Number
-        },
+        origen: { type: String},
+        destino: { type: String},
+        leaving: { type: String},
+        arriving: { type: String},
+        Bus_placa: { type: String},
     },
     {
         timestamps: true,
@@ -29,4 +27,4 @@ const BusSchema: Schema = new Schema(
     }
 );
 
-export default mongoose.model<IBusModel>('Bus', BusSchema);
+export default mongoose.model<ITripModel>('Trip', TripSchema);

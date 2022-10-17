@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import BusParking from '../models/BusParking';
 import Parking from '../models/Parking';
 import Schedule from '../models/Schedule';
+import BusparkingService from '../services/BusparkingService';
+
 
 const createBusParking = (req: Request, res: Response, next: NextFunction) => {
     const { bus_placa, parking_alias } = req.body;
@@ -59,7 +61,6 @@ const readBusParking = (req: Request, res: Response, next: NextFunction) => {
     const BusParkingId = req.params.BusParkingId;
 
     return BusParking.findById(BusParkingId)
-        .populate('author')
         .then((BusParking) => (BusParking ? res.status(200).json({ BusParking }) : res.status(404).json({ message: 'not found' })))
         .catch((error) => res.status(500).json({ error }));
 };
@@ -75,24 +76,12 @@ function toSeconds(t:any) {
     return bits[0]*3600 + bits[1]*60 ;
 }
 
-// const updateBusParking = (req: Request, res: Response, next: NextFunction) => {
-//     const BusParkingId = req.params.BusParkingId;
-
-//     return BusParking.findById(BusParkingId)
-//         .then((BusParking) => {
-//             if (BusParking) {
-//                 BusParking.set(req.body);
-
-//                 return BusParking
-//                     .save()
-//                     .then((BusParking) => res.status(201).json({ BusParking }))
-//                     .catch((error) => res.status(500).json({ error }));
-//             } else {
-//                 return res.status(404).json({ message: 'not found' });
-//             }
-//         })
-//         .catch((error) => res.status(500).json({ error }));
-// };
+const updateBusParking = (req: Request, res: Response, next: NextFunction) => {
+    const BusParkingId = req.params.busParkingId;
+    BusparkingService.updateBusparkingService(BusParkingId,req.body)
+    .then((busParkings) => res.status(200).json({ busParkings }))
+    .catch((error) => res.status(500).json({ error }));
+};
 
 // const deleteBusParking = (req: Request, res: Response, next: NextFunction) => {
 //     const BusParkingId = req.params.BusParkingId;
@@ -102,4 +91,4 @@ function toSeconds(t:any) {
 //         .catch((error) => res.status(500).json({ error }));
 // };
 
-export default { createBusParking, readBusParking, readAll } //updateBusParking, deleteBusParking };
+export default { createBusParking, readBusParking, readAll, updateBusParking } //updateBusParking, deleteBusParking };

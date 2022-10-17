@@ -2,6 +2,7 @@
 node_modules
 /dist
 saves
+/backend/build/*
 /backend/build/
 # local env files
 .env
