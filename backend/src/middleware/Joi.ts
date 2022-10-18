@@ -4,6 +4,7 @@ import { IAuthor } from '../models/Author';
 import { IBook } from '../models/Book';
 import Logging from '../library/Logging';
 import { IParking } from '../models/Parking';
+import { ITrip } from '../models/Trip';
 
 export const ValidateJoi = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -47,12 +48,29 @@ export const Schemas = {
             name: Joi.string()
                 .regex(/^[0-9a-zA-Z]{5,}$/)
                 .required(),
-             locations: Joi.object().keys({ 
-                lat:Joi.number(),
-                lng:Joi.number(),
+            locations: Joi.object().keys({
+                lat: Joi.number(),
+                lng: Joi.number(),
 
-             }),
+            }),
             capacity: Joi.number().required()
         })
+    },
+    trip: {
+        create: Joi.object<ITrip>({
+            origen: Joi.string()
+                .regex(/^[0-9a-zA-Z]{5,}$/).optional()
+            ,
+            destino: Joi.string()
+                .regex(/^[0-9a-zA-Z]{5,}$/).required()
+            ,
+            arriving: Joi.string().required()
+            ,
+            bus_placa: Joi.string()
+            .regex(/^[0-9A-Z]{6}$/).required()
+        
+
+        })
     }
+
 };

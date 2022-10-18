@@ -1,7 +1,7 @@
 <template>
     <!-- component -->
     <div class="flex h-screen bg-gray-100">
-        <div class="m-auto">
+        <div class="text-left">
             <form>
                 <div class="mt-5 bg-white rounded-lg shadow">
                     <div class="flex">
@@ -106,6 +106,16 @@
                                     </path>
                                 </svg>
                             </button>
+                            <button type="button" @click="cancelTrip(item)"
+                                class="px-2 py-2 font-medium tracking-wide text-black capitalize transition duration-300 ease-in-out transform rounded-xl hover:bg-gray-300 focus:outline-none active:scale-95">
+                                <box-icon type='solid' name='trash'></box-icon>
+                            </button>
+                            <button type="button" @click="confirmTrip(item.bus_placa)"
+                                class="px-2 py-2 font-medium tracking-wide text-black capitalize transition duration-300 ease-in-out transform rounded-xl hover:bg-gray-300 focus:outline-none active:scale-95">
+                                <box-icon name='check-double'></box-icon>
+                            </button>
+
+                            
                         </div>
                     </div>
                 </div>
@@ -118,7 +128,8 @@
 <script>
 
 import { getTrip } from '../services/parkingService'
-
+import 'boxicons'
+import 'boxicons/css/boxicons.min.css'
 export default {
 
     name: 'listBuses',
@@ -169,6 +180,14 @@ export default {
             }
             this.$emit('createTrip', payload)
             this.clearForm();
+        },
+        confirmTrip(e) {
+            console.log(e)
+            this.$emit('confirmTrip', e)
+        },
+        cancelTrip(e){
+            console.log(e)
+            this.$emit('cancelTrip', e)
         },
         clearForm() {
             this.origin=""

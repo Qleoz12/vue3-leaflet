@@ -36,7 +36,7 @@ export async function createTrip(data) {
             destino: data.destino,
             leaving: data.leaving,
             arriving: data.arriving,
-            bus_placa: data.placa
+            bus_placa: data.bus_placa
         
         })
       
