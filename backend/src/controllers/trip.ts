@@ -85,7 +85,7 @@ const readTrip = (req: Request, res: Response, next: NextFunction) => {
 
 const readAll = (req: Request, res: Response, next: NextFunction) => {
     return Trip.find()
-        .then((Trips) => res.status(200).json({ Trips }))
+        .then((trips) => res.status(200).json({ trips }))
         .catch((error) => res.status(500).json({ error }));
 };
 

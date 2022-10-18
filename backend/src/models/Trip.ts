@@ -1,3 +1,4 @@
+import { boolean } from 'joi';
 import mongoose, { Document, Schema } from 'mongoose';
 
 
@@ -6,7 +7,7 @@ export interface ITrip {
     destino: string;
     leaving: string;
     arriving: string;
-    Bus_placa: string;
+    bus_placa: string;
 }
 
 export interface ITripModel extends ITrip, Document {}
@@ -19,7 +20,8 @@ const TripSchema: Schema = new Schema(
         destino: { type: String},
         leaving: { type: String},
         arriving: { type: String},
-        Bus_placa: { type: String},
+        bus_placa: { type: String},
+        status: {type: Boolean}
     },
     {
         timestamps: true,

@@ -2,7 +2,7 @@
     <!-- component -->
     <div class="flex h-screen bg-gray-100">
         <div class="m-auto">
-            <div>
+            <form>
                 <div class="mt-5 bg-white rounded-lg shadow">
                     <div class="flex">
                         <div class="flex-1 py-5 pl-5 overflow-hidden">
@@ -47,13 +47,19 @@
                     <div class="px-5 pb-5">
                         <input v-model="origin" placeholder="origin"
                             class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                        <input v-model="leaving" placeholder="leaving"
+                        <input v-model="leaving" placeholder="leaving" @input="formatTime" maxLength="5"
                             class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+                    </div>
+                    <div class="flex">
+                        <div class="flex-1 py-5 pl-5 overflow-hidden">
+                            <input v-model="placa" placeholder="placa"
+                                class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+                        </div>
                     </div>
                     <hr class="mt-4">
                     <div class="flex flex-row-reverse p-3">
                         <div class="flex-initial pl-3">
-                            <button type="button"
+                            <button type="button" @click='createTrip()'
                                 class="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-800  focus:outline-none focus:bg-gray-900  transition duration-300 transform active:scale-95 ease-in-out">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                                     fill="#FFFFFF">
@@ -71,25 +77,25 @@
                     </div>
                 </div>
                 <div class="mt-5 bg-white shadow cursor-pointer rounded-xl">
-                    <div class="flex">
+                    <div v-for="item in trips" class="flex">
                         <div class="flex-1 py-5 pl-5 overflow-hidden">
                             <ul>
-                                <li class="text-xs text-gray-600 uppercase ">Receiver</li>
-                                <li>Max Mustermann</li>
-                                <li>Musterstrasse 1</li>
-                                <li>4020 Linz</li>
+                                <li class="text-xs text-gray-600 uppercase ">origin</li>
+                                <li>{{item.origen}}</li>
+                                <li>{{item.leaving}}</li>
+                                <li>{{item.bus_placa}}</li>
                             </ul>
                         </div>
                         <div class="flex-1 py-5 pl-1 overflow-hidden">
                             <ul>
-                                <li class="text-xs text-gray-600 uppercase">Sender</li>
-                                <li>Rick Astley</li>
-                                <li>Rickrolled 11</li>
-                                <li>1000 Vienna</li>
+                                <li class="text-xs text-gray-600 uppercase">destination</li>
+                                <li>{{item.destino}}</li>
+                                <li>{{item.arriving}}</li>
+                                <li>{{item.bus_placa}}</li>
                             </ul>
                         </div>
                         <div class="flex-none pt-2.5 pr-2.5 pl-1">
-                            <button @click='createTrip()' type="button"
+                            <button type="button"
                                 class="px-2 py-2 font-medium tracking-wide text-black capitalize transition duration-300 ease-in-out transform rounded-xl hover:bg-gray-300 focus:outline-none active:scale-95">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                                     fill="#000000">
@@ -103,13 +109,16 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
 </template>
 
 <script>
+
+import { getTrip } from '../services/parkingService'
+
 export default {
 
     name: 'listBuses',
@@ -125,17 +134,48 @@ export default {
             return this.currentPage * this.itemsPerPage;
         }
     },
+    data() {
+        return {
+            trips: [],
+
+        }
+    },
     methods: {
+
+        formatTime(value) {
+            const numericValue = value.replace(/[^0-9]/g, "");
+            let [a = '', b = '', c = ''] = numericValue.substr(0, 3).split('');
+            b = b > 5 ? 5 : b;
+            value = numericValue.length >= 2 ? `${a}:${b}${c}` : a;
+        },
+        getTrip() {
+
+            getTrip().then(response => {
+                console.log(response);
+                this.trips = response.data.trips;
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         createTrip() {
             console.log(this.name)
             const payload = {
                 origen: this.origin,
                 destino: this.destination,
                 leaving: this.leaving,
-                arriving: this.arriving
+                arriving: this.arriving,
+                bus_placa: this.placa
             }
             this.$emit('createTrip', payload)
             this.clearForm();
+        },
+        clearForm() {
+            this.origin=""
+            this.destination=""
+            this.leaving=""
+            this.arriving=""
+            this.placa=""
         },
         getAllParkingBuses() {
             this.$emit('getAllParkingBuses')
@@ -150,6 +190,11 @@ export default {
                 this.currentPage++;
             }
         },
+    },
+    mounted() {
+
+        console.log(`the component is now mounted.`)
+        this.getTrip();
     }
 }
 </script>

@@ -1,13 +1,13 @@
 <template>
   <!-- <div class="mapContainer">
   </div> -->
-  <listBuses @createTrip="Create($event)" />
+  <listBuses @createTrip="createTrip($event)" />
 </template>
 
 <script>
 // @ is an alias to /src
 import listBuses from "../components/ListBuses.vue";
-import { getAllParkingBuses } from '../services/parkingService'
+import { getAllParkingBuses,createTrip } from '../services/parkingService'
 
 export default {
   name: "Buses",
@@ -44,7 +44,7 @@ export default {
           console.log(error);
         });
     },
-    Create(data) {
+    createTrip(data) {
       console.log('data:::', data)
       createTrip(data).then(response => {
         console.log(response);
