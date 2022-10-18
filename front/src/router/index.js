@@ -4,6 +4,8 @@ import Circles from '../views/Circles.vue'
 import Buses from '../views/Buses.vue'
 import Parkings from '../views/Parkings.vue'
 
+
+
 const routes = [
   {
     path: '/',
@@ -24,6 +26,11 @@ const routes = [
     path: '/parkings',
     name: 'custom2',
     component: Parkings
+  },
+  {
+    path: '/buses',
+    name: 'buses',
+    component: Buses
   },
 ]
 

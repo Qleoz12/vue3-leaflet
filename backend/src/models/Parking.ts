@@ -7,7 +7,8 @@ export interface IParking {
             lat: Number, 
             lng: Number
         };
-    capacity: Number
+    capacity: number
+    disponible: number
 }
 
 export interface IParkingModel extends IParking, Document {}
@@ -21,7 +22,7 @@ const ParkingSchema: Schema = new Schema(
             lat: Number, 
             lng: Number
         },
-        capacity: Number
+        capacity: Number,
     },
     {
         timestamps: true,

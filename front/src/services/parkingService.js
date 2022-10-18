@@ -1,10 +1,18 @@
 const axios = require('axios').default;
 
-export async function getAllUsers() {
+export async function getParkings() {
 
     return axios.get('http://localhost:9090/parkings/get');
     
 }
+
+export async function getAllParkingBuses() {
+
+    return axios.get('http://localhost:9090/busesparking/get');
+    
+}
+
+
 export async function createParking(data) {
     return axios.post(`http://localhost:9090/parkings/create`, {
             
@@ -14,6 +22,16 @@ export async function createParking(data) {
                 lng: Number(data.lng),
             },
             capacity: data.capacity
+        })
+      
+}
+
+
+
+export async function createTrip(data) {
+    return axios.post(`http://localhost:9090/trip/create`, {
+            
+            data
         })
       
 }

@@ -52,7 +52,7 @@ export const Schemas = {
                 lng:Joi.number(),
 
              }),
-            capacity: Joi.number()
+            capacity: Joi.number().required()
         })
     }
 };

@@ -9,6 +9,8 @@ import parkingsRoutes from './routes/Parking';
 import schedulesRoutes from './routes/Schedule';
 import bussesRoutes from './routes/Bus';
 import busParkingRoutes from './routes/BusParking';
+import TripRoutes from './routes/Trip';
+
 
 
 
@@ -61,6 +63,7 @@ const StartServer = () => {
     router.use('/schedules', schedulesRoutes);
     router.use('/buses', bussesRoutes);
     router.use('/busesParking', busParkingRoutes);
+    router.use('/trip', TripRoutes);
 
     /** Healthcheck */
     router.get('/ping', (req, res, next) => res.status(200).json({ hello: 'world' }));

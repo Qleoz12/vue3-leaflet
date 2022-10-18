@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Parking from '../models/Parking';
+import BusParking from '../models/BusParking';
 
 const createBook = (req: Request, res: Response, next: NextFunction) => {
     const { name, locations,capacity} = req.body;
@@ -27,10 +28,22 @@ const readBook = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-const readAll = (req: Request, res: Response, next: NextFunction) => {
-    return Parking.find()
-        .then((parks) => res.status(200).json({ parks }))
-        .catch((error) => res.status(500).json({ error }));
+const readAll = async (req: Request, res: Response, next: NextFunction) => {
+
+    let parkings = await  Parking.find({ status: true }).lean().exec()
+    let busParking = await BusParking.find({ status: true }).exec()
+
+    for (var _i = 0; _i < parkings.length; _i++) {
+        parkings[_i].disponible=parkings[_i].capacity
+        for (var _j = 0; _j < busParking.length; _j++) {
+            if(parkings[_i].name==busParking[_j].parking_alias){
+                parkings[_i].disponible-=1;  
+            }
+          }
+      }
+    return res.status(200).json({ parkings }) 
+        // .then((parks) => res.status(200).json({ parks }))
+        // .catch((error) => res.status(500).json({ error }));
 };
 
 // const updateBook = (req: Request, res: Response, next: NextFunction) => {

@@ -29,19 +29,19 @@
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Product name
+                                parking
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Color
+                                lat
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Category
+                                lng
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 capacity
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                <span class="sr-only">Edit</span>
+                                disponibilidad
                             </th>
                         </tr>
                     </thead>
@@ -69,12 +69,8 @@
                             <td class="px-6 py-4">
                                 {{item.capacity}}
                             </td>
-                            <td class="px-6 py-4">
-                                estado
-                            </td>
                             <td class="px-6 py-4 text-right">
-                                <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                {{item.disponible}}
                             </td>
                         </tr>
 
