@@ -8,6 +8,7 @@ export interface ITrip {
     leaving: string;
     arriving: string;
     bus_placa: string;
+    complete: Boolean;
 }
 
 export interface ITripModel extends ITrip, Document {}
@@ -21,7 +22,8 @@ const TripSchema: Schema = new Schema(
         leaving: { type: String},
         arriving: { type: String},
         bus_placa: { type: String},
-        status: {type: Boolean}
+        status: {type: Boolean},
+        complete: {type: Boolean},
     },
     {
         timestamps: true,

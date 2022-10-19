@@ -59,12 +59,14 @@ export const Schemas = {
     trip: {
         create: Joi.object<ITrip>({
             origen: Joi.string()
-                .regex(/^[0-9a-zA-Z]{5,}$/).optional()
+                .regex(/^[0-9a-zA-Z]{5,}$/).optional().empty()
             ,
             destino: Joi.string()
                 .regex(/^[0-9a-zA-Z]{5,}$/).required()
             ,
             arriving: Joi.string().required()
+            ,
+            leaving: Joi.string().optional()
             ,
             bus_placa: Joi.string()
             .regex(/^[0-9A-Z]{6}$/).required()

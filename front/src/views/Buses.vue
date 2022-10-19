@@ -19,13 +19,20 @@
     </l-map>
 
   </div>
-  <listBuses @createTrip="createTrip($event)" />
+  <br/>
+  <hr/>
+  <div class="grid grid-cols-2 gap-2">
+    <listBuses @createTrip="createTrip($event)"  @confirmTrip="confirmTrip($event)"/>
+    <!-- <registerParking @registerTrip="registerTrip($event)" /> -->
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import listBuses from "../components/ListBuses.vue";
-import { getAllParkingBuses, createTrip } from '../services/parkingService'
+import registerParking from "../components/RegisterParking.vue";
+
+import { getAllParkingBuses, createTrip,confirmTrip } from '../services/parkingService'
 import "leaflet/dist/leaflet.css";
 import {
   LMap,
@@ -44,6 +51,7 @@ import { mapState } from "vuex"; export default {
     LTileLayer,
     LControlLayers,
     LControl,
+    registerParking
   },
   mounted() {
     console.log(`the component is now mounted.`)
@@ -96,7 +104,7 @@ import { mapState } from "vuex"; export default {
         iconSize: [70, 70]
       })
       var marker = L.marker([28.2380, 83.9956], { icon: taxiIcon }).addTo(this.map);
-      var control=L.Routing.control({
+      var control = L.Routing.control({
         waypoints: [
           L.latLng(start.lat, start.lng),
           L.latLng(destination.lat, destination.lng)
@@ -104,20 +112,20 @@ import { mapState } from "vuex"; export default {
       }).on('routesfound', function (e) {
         var routes = e.routes;
         console.log(routes);
-        
+
         e.routes[0].coordinates.forEach(function (coord, index) {
           setTimeout(function () {
             marker.setLatLng([coord.lat, coord.lng]);
           }, 100 * index)
 
-          
+
         })
         var summary = routes[0].summary;
-          console.log(summary)
+        console.log(summary)
 
       }).addTo(this.map);
 
-      
+
     },
     showMovement2() {
 
@@ -142,6 +150,21 @@ import { mapState } from "vuex"; export default {
       createTrip(data).then(response => {
         console.log(response);
         this.getAllParkingBuses();
+
+
+        this.showMovement(latlng, latlng2)
+
+      })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    confirmTrip(data) {
+      console.log('data:::', data)
+      confirmTrip(data).then(response => {
+        console.log(response);
+       
+
       })
         .catch(function (error) {
           console.log(error);

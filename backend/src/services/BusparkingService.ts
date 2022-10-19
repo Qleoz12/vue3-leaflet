@@ -20,7 +20,7 @@ export default class BusparkingService {
     
         let status = true;
     
-        BusParking.findOne({ bus_placa: bus_placa, status: true })
+        return BusParking.findOne({ bus_placa: bus_placa, status: true })
             .then((rs) => {
                 if (rs) throw { "message": "already at parking" };
             })

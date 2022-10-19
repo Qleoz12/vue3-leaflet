@@ -44,19 +44,17 @@ const createTrip = (req: Request, res: Response, next: NextFunction) => {
             }
             
             let busparkingtoupdated = await BusParking.findOne({ bus_placa: bus_placa, status: true }).exec()
+            let BusparkingServicers
             if (busparkingtoupdated != undefined) {
                 busparkingtoupdated.status=false
-                BusparkingService.updateBusparkingService(busparkingtoupdated.id,busparkingtoupdated)
+                BusparkingServicers=await BusparkingService.updateBusparkingService(busparkingtoupdated.id,busparkingtoupdated)
             }
             else
             {
-                BusparkingService.createBusParking(bus_placa,destino)
+                BusparkingServicers= await BusparkingService.createBusParking(bus_placa,destino)
+
             }
             
-
-
-        })
-        .then(() => {
             const trip = new Trip({
                 _id: new mongoose.Types.ObjectId(),
                 origen,
@@ -69,6 +67,8 @@ const createTrip = (req: Request, res: Response, next: NextFunction) => {
             console.log(Trip)
             return trip
                 .save()
+
+
         })
         .then((Trip) => res.status(201).json({ Trip }))
         .catch((error) => res.status(500).json({ error }));
@@ -94,24 +94,24 @@ function toSeconds(t: any) {
     return bits[0] * 3600 + bits[1] * 60;
 }
 
-// const updateTrip = (req: Request, res: Response, next: NextFunction) => {
-//     const TripId = req.params.TripId;
+const updateTrip = (req: Request, res: Response, next: NextFunction) => {
+    const TripId = req.params.TripId;
 
-//     return Trip.findById(TripId)
-//         .then((Trip) => {
-//             if (Trip) {
-//                 Trip.set(req.body);
+    return Trip.findById(TripId)
+        .then((Trip) => {
+            if (Trip) {
+                Trip.set(req.body);
 
-//                 return Trip
-//                     .save()
-//                     .then((Trip) => res.status(201).json({ Trip }))
-//                     .catch((error) => res.status(500).json({ error }));
-//             } else {
-//                 return res.status(404).json({ message: 'not found' });
-//             }
-//         })
-//         .catch((error) => res.status(500).json({ error }));
-// };
+                return Trip
+                    .save()
+                    .then((Trip) => res.status(201).json({ Trip }))
+                    .catch((error) => res.status(500).json({ error }));
+            } else {
+                return res.status(404).json({ message: 'not found' });
+            }
+        })
+        .catch((error) => res.status(500).json({ error }));
+};
 
 // const deleteTrip = (req: Request, res: Response, next: NextFunction) => {
 //     const TripId = req.params.TripId;
@@ -121,6 +121,6 @@ function toSeconds(t: any) {
 //         .catch((error) => res.status(500).json({ error }));
 // };
 
-export default { createTrip, readTrip, readAll } //updateTrip, deleteTrip };
+export default { createTrip, readTrip, readAll, updateTrip } //updateTrip, deleteTrip };
 
 

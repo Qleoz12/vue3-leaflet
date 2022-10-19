@@ -42,6 +42,15 @@ export async function createTrip(data) {
       
 }
 
+export async function confirmTrip(data) {
+    return axios.put(`http://localhost:9090/trip/update/`+data.id, {
+            
+            status:false,
+            complete:true
+        })
+      
+}
+
 export async function getTrip(data) {
     return axios.get(`http://localhost:9090/trip/get`)
       
