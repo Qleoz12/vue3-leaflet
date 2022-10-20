@@ -144,6 +144,7 @@ export default {
 
     name: 'listBuses',
     props: ['parkingsBuses'],
+    expose: ['parkings', ],
     computed: {
         numPages() {
             return this.itemsTotal / this.itemsPerPage;

@@ -19,10 +19,10 @@
     </l-map>
 
   </div>
-  <br/>
-  <hr/>
+  <br />
+  <hr />
   <div class="grid grid-cols-2 gap-2">
-    <listBuses @createTrip="createTrip($event)"  @confirmTrip="confirmTrip($event)"/>
+    <listBuses ref="listBusesRef" @createTrip="createTrip($event)" @confirmTrip="confirmTrip($event)" :key="listBusesKey" />
     <!-- <registerParking @registerTrip="registerTrip($event)" /> -->
   </div>
 </template>
@@ -31,8 +31,7 @@
 // @ is an alias to /src
 import listBuses from "../components/ListBuses.vue";
 import registerParking from "../components/RegisterParking.vue";
-
-import { getAllParkingBuses, createTrip,confirmTrip } from '../services/parkingService'
+import { getAllParkingBuses, createTrip, confirmTrip } from '../services/parkingService'
 import "leaflet/dist/leaflet.css";
 import {
   LMap,
@@ -43,7 +42,9 @@ import {
 import L from "leaflet";
 import "leaflet-routing-machine";
 import "leaflet-draw"
-import { mapState } from "vuex"; export default {
+import { mapState } from "vuex";
+
+export default {
   name: "Buses",
   components: {
     listBuses,
@@ -80,6 +81,9 @@ import { mapState } from "vuex"; export default {
         radius: 6,
         color: "red",
       },
+      listBusesKey: 0,
+      currentTrip:null,
+
 
     };
   },
@@ -135,7 +139,7 @@ import { mapState } from "vuex"; export default {
       this.showMovement(latlng, latlng2)
     },
     getAllParkingBuses() {
-      Promise.all([getAllParkingBuses()])
+      return Promise.all([getAllParkingBuses()])
         .then(([res]) => {
 
           this.parkingsBuses = res.data.busParkings;
@@ -147,14 +151,37 @@ import { mapState } from "vuex"; export default {
     },
     createTrip(data) {
       console.log('data:::', data)
+      this.currentTrip=data
       createTrip(data).then(response => {
         console.log(response);
-        this.getAllParkingBuses();
 
 
-        this.showMovement(latlng, latlng2)
+
 
       })
+      .then(function() {
+        
+        })
+        .then(() => {
+          this.listparkings=this.$refs.listBusesRef.parkings;
+          var latlng = L.latLng(4.633874113458368, -74.08808111162087);
+          var latlng2 = L.latLng(4.660539778246436, -74.00580277032782);
+          for (var _i = 0; _i < this.listparkings.length; _i++) 
+          {
+              if(this.listparkings[_i].name==this.currentTrip.origen){
+                latlng=L.latLng(this.listparkings[_i].locations.lat, this.listparkings[_i].locations.lng);
+              }
+              if(this.listparkings[_i].name==this.currentTrip.destino){
+                latlng2=L.latLng(this.listparkings[_i].locations.lat, this.listparkings[_i].locations.lng);
+              }
+          }
+          this.listBusesKey += 1
+          
+
+          this.showMovement(latlng, latlng2)
+        }
+
+        )
         .catch(function (error) {
           console.log(error);
         });
@@ -163,9 +190,14 @@ import { mapState } from "vuex"; export default {
       console.log('data:::', data)
       confirmTrip(data).then(response => {
         console.log(response);
-       
+        this.listBusesKey += 1
 
       })
+        .then(response => {
+          console.log(response);
+
+
+        })
         .catch(function (error) {
           console.log(error);
         });
