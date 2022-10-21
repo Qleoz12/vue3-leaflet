@@ -2,7 +2,6 @@
     <div class="">
         <div class="">
             <div class="">
-                <h2 class="mb-8 text-2xl text-cyan-900 font-bold">Parkings</h2>
                 <div class="flex justify-center my-2 mx-4 md:mx-0">
                     <form class="w-full max-w-xl bg-white rounded-lg shadow-md p-6">
                         <div class="flex flex-wrap -mx-3 mb-6">
